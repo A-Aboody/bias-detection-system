@@ -1,0 +1,93 @@
+{
+  "gender": {
+    "male_terms": [
+      "he", "him", "his", "man", "men", "male", "boy", "boys", "father",
+      "brother", "son", "husband", "gentleman", "guy", "dude", "sir"
+    ],
+    "female_terms": [
+      "she", "her", "hers", "woman", "women", "female", "girl", "girls",
+      "mother", "sister", "daughter", "wife", "lady", "gal", "madam"
+    ],
+    "occupations": [
+      "nurse", "secretary", "teacher", "receptionist", "librarian",
+      "engineer", "doctor", "ceo", "pilot", "mechanic", "programmer",
+      "scientist", "homemaker", "caregiver", "nanny"
+    ],
+    "negative_traits": [
+      "stupid", "dumb", "emotional", "weak", "irrational", "hysterical",
+      "bossy", "nagging", "incompetent", "inferior", "crazy", "unstable",
+      "oversensitive", "dramatic", "silly"
+    ],
+    "positive_traits": [
+      "smart", "intelligent", "rational", "strong", "logical", "competent",
+      "superior", "capable", "brilliant", "assertive", "confident", "stable",
+      "calm", "reasonable"
+    ]
+  },
+  "race": {
+    "terms": [
+      "black", "white", "asian", "hispanic", "latino", "latina", "african",
+      "caucasian", "race", "racial", "ethnic", "ethnicity", "minority", "immigrant"
+    ],
+    "stereotypes": [
+      "ghetto", "urban", "inner-city", "privileged", "articulate",
+      "exotic", "foreigner", "illegal", "alien", "thug", "gangster",
+      "criminal", "suspicious", "trouble", "dangerous"
+    ],
+    "coded_language": [
+      "inner-city", "urban", "those people", "you people", "them", "they"
+    ],
+    "racial_activities": {
+      "asian": ["math", "science", "technology", "studying"],
+      "black": ["sports", "basketball", "athletics", "running"],
+      "hispanic": ["labor", "manual work", "landscaping"],
+      "white": ["leadership", "management", "executive"]
+    }
+  },
+  "religion": {
+    "terms": [
+      "christian", "muslim", "jewish", "hindu", "buddhist", "atheist", 
+      "religious", "islam", "christianity", "judaism", "catholic", 
+      "protestant", "sikh", "mormon"
+    ],
+    "stereotypes": [
+      "terrorist", "extremist", "fundamentalist", "radical", "traditional", 
+      "conservative", "fanatical", "zealot"
+    ]
+  },
+  "political": {
+    "left": [
+      "liberal", "progressive", "democrat", "leftist", "socialist", 
+      "communist", "left-wing"
+    ],
+    "right": [
+      "conservative", "republican", "right-wing", "traditional", 
+      "nationalist", "libertarian"
+    ],
+    "loaded": [
+      "radical", "extremist", "militant", "activist", "fanatic", 
+      "snowflake", "fascist", "nazi", "commie"
+    ]
+  },
+  "socioeconomic": {
+    "terms": [
+      "poor", "rich", "wealthy", "poverty", "homeless", "elite", 
+      "lower-class", "upper-class", "working-class", "middle-class", 
+      "affluent", "underprivileged"
+    ],
+    "stereotypes": [
+      "lazy", "entitled", "privileged", "uneducated", "sophisticated", 
+      "trashy", "classy", "ghetto", "welfare", "handout"
+    ]
+  },
+  "age": {
+    "terms": [
+      "old", "young", "elderly", "senior", "youth", "millennial", 
+      "boomer", "teenager", "child", "adult"
+    ],
+    "stereotypes": [
+      "senile", "immature", "inexperienced", "outdated", "entitled", 
+      "lazy", "tech-savvy", "out-of-touch"
+    ]
+  }
+}

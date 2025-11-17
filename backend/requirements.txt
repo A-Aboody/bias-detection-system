@@ -1,0 +1,16 @@
+fastapi==0.115.0
+uvicorn[standard]==0.32.0
+python-multipart==0.0.12
+pydantic==2.9.0
+transformers==4.46.0
+torch==2.9.1
+datasets==3.1.0
+scikit-learn==1.5.2
+pandas==2.2.3
+numpy==1.26.4
+nltk==3.9.1
+spacy==3.8.2
+python-dotenv==1.0.1
+accelerate==1.1.0
+sentencepiece==0.1.99
+protobuf==5.28.3

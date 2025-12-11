@@ -272,7 +272,7 @@ def _generate_recommendations(results: Dict) -> List[str]:
 
     if results["severity"] == "severe":
         recommendations.append(
-            "⚠️ High bias detected. Consider significant revision of the text."
+            "High bias detected. Consider significant revision of the text."
         )
     elif results["severity"] == "moderate":
         recommendations.append(

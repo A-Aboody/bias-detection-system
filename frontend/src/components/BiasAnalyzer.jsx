@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Send, FileText, Loader2, AlertCircle } from 'lucide-react';
+import { Send, FileText, Loader2, AlertCircle, CheckSquare, Square } from 'lucide-react';
 import { biasDetectionAPI } from '../services/api';
 import ResultsDisplay from './ResultsDisplay';
 
@@ -9,16 +9,51 @@ const BiasAnalyzer = () => {
   const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
   const [analysisMode, setAnalysisMode] = useState('detect'); // 'detect' or 'comprehensive'
+  const [selectedCategories, setSelectedCategories] = useState({
+    gender: true,
+    race: true,
+    religion: true,
+    political: true,
+    socioeconomic: true,
+    age: true,
+  });
 
   const exampleTexts = [
     "The female nurse assisted the male doctor with the surgery.",
     "He is an excellent engineer, while she makes a great secretary.",
     "The inner-city youth were suspected of the crime.",
+    "The elderly worker is too old to learn new technology.",
   ];
+
+  const handleCategoryToggle = (category) => {
+    setSelectedCategories((prev) => ({
+      ...prev,
+      [category]: !prev[category],
+    }));
+  };
+
+  const handleSelectAll = () => {
+    const allSelected = Object.values(selectedCategories).every((v) => v);
+    const newState = allSelected ? false : true;
+    setSelectedCategories({
+      gender: newState,
+      race: newState,
+      religion: newState,
+      political: newState,
+      socioeconomic: newState,
+      age: newState,
+    });
+  };
 
   const handleAnalyze = async () => {
     if (!text.trim()) {
       setError('Please enter some text to analyze');
+      return;
+    }
+
+    const activeCategoriesCount = Object.values(selectedCategories).filter((v) => v).length;
+    if (activeCategoriesCount === 0) {
+      setError('Please select at least one category to analyze');
       return;
     }
 
@@ -27,11 +62,15 @@ const BiasAnalyzer = () => {
     setResults(null);
 
     try {
+      const activeCategories = Object.keys(selectedCategories).filter(
+        (cat) => selectedCategories[cat]
+      );
+
       let data;
       if (analysisMode === 'comprehensive') {
         data = await biasDetectionAPI.analyzeText(text);
       } else {
-        data = await biasDetectionAPI.detectBias(text);
+        data = await biasDetectionAPI.detectBias(text, activeCategories);
       }
       setResults(data);
     } catch (err) {
@@ -149,20 +188,43 @@ const BiasAnalyzer = () => {
             </div>
           </div>
 
-          {/* Info Box */}
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <div className="flex items-start">
-              <AlertCircle className="w-5 h-5 text-blue-600 mr-3 mt-0.5 flex-shrink-0" />
-              <div className="text-sm text-blue-800">
-                <p className="font-medium mb-1">Detection Categories:</p>
-                <ul className="list-disc list-inside space-y-1 text-blue-700">
-                  <li>Gender bias</li>
-                  <li>Racial/ethnic bias</li>
-                  <li>Religious bias</li>
-                  <li>Political bias</li>
-                  <li>Socioeconomic bias</li>
-                </ul>
-              </div>
+          {/* Category Selection */}
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">
+                Select Categories
+              </h3>
+              <button
+                onClick={handleSelectAll}
+                className="text-sm text-primary-600 hover:text-primary-700 font-medium"
+              >
+                {Object.values(selectedCategories).every((v) => v) ? 'Deselect All' : 'Select All'}
+              </button>
+            </div>
+            <div className="space-y-3">
+              {Object.keys(selectedCategories).map((category) => (
+                <label
+                  key={category}
+                  className="flex items-center space-x-3 cursor-pointer group"
+                >
+                  <div className="flex items-center">
+                    {selectedCategories[category] ? (
+                      <CheckSquare className="w-5 h-5 text-primary-600 group-hover:text-primary-700" />
+                    ) : (
+                      <Square className="w-5 h-5 text-gray-400 group-hover:text-gray-500" />
+                    )}
+                  </div>
+                  <input
+                    type="checkbox"
+                    checked={selectedCategories[category]}
+                    onChange={() => handleCategoryToggle(category)}
+                    className="sr-only"
+                  />
+                  <span className="text-sm text-gray-700 capitalize">
+                    {category === 'socioeconomic' ? 'Socioeconomic' : category} bias
+                  </span>
+                </label>
+              ))}
             </div>
           </div>
         </div>

@@ -7,10 +7,89 @@ import {
   Eye,
   Lightbulb,
   BarChart3,
+  Download,
+  FileJson,
+  FileText,
 } from 'lucide-react';
 
 const ResultsDisplay = ({ results, mode }) => {
   const [showHighlights, setShowHighlights] = useState(true);
+
+  // Export functions
+  const exportAsJSON = () => {
+    const dataStr = JSON.stringify(results, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `bias-analysis-${new Date().toISOString().slice(0, 10)}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const exportAsText = () => {
+    let report = '=== BIAS DETECTION ANALYSIS REPORT ===\n\n';
+    report += `Date: ${new Date(results.timestamp).toLocaleString()}\n`;
+    report += `Analysis Mode: ${mode === 'comprehensive' ? 'Comprehensive' : 'Quick Detection'}\n\n`;
+
+    const hasBias = mode === 'comprehensive' ? results.bias_analysis?.has_bias : results.has_bias;
+    const severity = mode === 'comprehensive' ? results.bias_analysis?.severity : results.severity;
+    const categories = mode === 'comprehensive' ? results.bias_analysis?.categories || [] : results.bias_categories || [];
+    const scores = mode === 'comprehensive' ? results.bias_analysis?.scores || {} : results.bias_scores || {};
+    const overallScore = mode === 'comprehensive' ? results.bias_analysis?.overall_score : results.overall_score;
+
+    report += `--- OVERALL ASSESSMENT ---\n`;
+    report += `Bias Detected: ${hasBias ? 'Yes' : 'No'}\n`;
+    if (hasBias) {
+      report += `Severity: ${severity.charAt(0).toUpperCase() + severity.slice(1)}\n`;
+      report += `Overall Score: ${(overallScore * 100).toFixed(1)}%\n`;
+    }
+    report += '\n';
+
+    if (categories.length > 0) {
+      report += `--- DETECTED CATEGORIES ---\n`;
+      categories.forEach(cat => {
+        const score = scores[cat] ? (scores[cat] * 100).toFixed(1) : 'N/A';
+        report += `- ${cat.charAt(0).toUpperCase() + cat.slice(1)}: ${score}%\n`;
+      });
+      report += '\n';
+    }
+
+    if (results.highlights && results.highlights.length > 0) {
+      report += `--- HIGHLIGHTED TERMS (${results.highlights.length}) ---\n`;
+      results.highlights.forEach((h, i) => {
+        report += `${i + 1}. "${h.term}" (${h.category} bias)\n`;
+      });
+      report += '\n';
+    }
+
+    if (mode === 'comprehensive' && results.statistics) {
+      report += `--- TEXT STATISTICS ---\n`;
+      report += `Words: ${results.statistics.word_count}\n`;
+      report += `Characters: ${results.statistics.char_count}\n`;
+      report += `Sentences: ${results.statistics.sentence_count}\n\n`;
+    }
+
+    if (mode === 'comprehensive' && results.recommendations && results.recommendations.length > 0) {
+      report += `--- RECOMMENDATIONS ---\n`;
+      results.recommendations.forEach((rec, i) => {
+        report += `${i + 1}. ${rec}\n`;
+      });
+      report += '\n';
+    }
+
+    report += `--- ORIGINAL TEXT ---\n`;
+    report += results.text;
+    report += '\n\n=== END OF REPORT ===';
+
+    const dataBlob = new Blob([report], { type: 'text/plain' });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `bias-analysis-${new Date().toISOString().slice(0, 10)}.txt`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
 
   // Get severity color and icon
   const getSeverityInfo = (severity) => {
@@ -133,6 +212,26 @@ const ResultsDisplay = ({ results, mode }) => {
 
   return (
     <div className="space-y-6 fade-in">
+      {/* Export Buttons */}
+      <div className="flex justify-end space-x-2">
+        <button
+          onClick={exportAsJSON}
+          className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+          title="Export as JSON"
+        >
+          <FileJson className="w-4 h-4" />
+          <span>Export JSON</span>
+        </button>
+        <button
+          onClick={exportAsText}
+          className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+          title="Export as Text Report"
+        >
+          <FileText className="w-4 h-4" />
+          <span>Export Report</span>
+        </button>
+      </div>
+
       {/* Overall Status Card */}
       <div className={`${severityInfo.bgColor} border ${severityInfo.borderColor} rounded-lg p-6`}>
         <div className="flex items-start justify-between">

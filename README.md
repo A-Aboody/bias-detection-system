@@ -143,7 +143,7 @@ pytest
 ## Project Information
 
 **Institution:** University of Michigan - Dearborn
-**Course:** Computer Science Senior Project
+**Course:** CIS 411
 **Semester:** Fall 2025
 
 **Team:** Abdula Ameen, Ali Zahr, Chance Inosencio, Ghina Albabbili
